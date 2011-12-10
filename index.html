@@ -1,0 +1,80 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="terminal.css" />
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script type="text/javascript" src="jquery.terminal-0.4.3.min.js"></script>
+		
+	</head>
+	<style>
+		body { padding:0; margin:0; width:100%; }
+		div.lados { float: left; }
+		div.footer { width: 100%; background-color: #403834; height: 40px; clear: both; display: block; border-top: 1px solid #ddd; }
+		div.leftLados { border-right: 1px solid #36363A; background-color: #424143; }
+		div.rightLados { border-left: 1px solid #807F83; background-color: #67666A; /* url('shaderight.png') repeat-y;*/ }
+		div#banner {  }
+	</style>
+	<body>
+		<div id="left" class="lados leftLados">
+			
+		</div>
+		<div id="right" class="lados rightLados">
+			<div id="term"></div>
+			<div id="banner"><span class="texto">esse texto vai mudar de acordo com o mouseover</span></div>
+		</div>
+		<script type="text/javascript">
+			$(document).ready( function() {
+				resizeDiv();
+				
+				$(window).resize( function() {
+					resizeDiv();
+				});
+			});
+
+			function resizeDiv() {
+				screenHeight = $(window).height();
+				var screenWidth = $(window).width();
+
+				//screenHeight = (parseInt(screenHeight) - parseInt($('.footer').css('height'))) - 2;
+				screenWidth = parseInt((parseInt(screenWidth)/2));
+
+				$('#left').css('min-height',screenHeight);
+				$('#right').css('min-height',screenHeight);
+				
+				$('#banner').css('min-height',parseInt(screenHeight/4)-20);
+				$('#banner').css('min-width',screenWidth-1);
+
+				$('#left').css('min-width',screenWidth-1);
+				$('#right').css('min-width',screenWidth-1);
+
+				if ($('#left').height() > $('#right').height()) {
+					$('#right').css('min-height',$('#left').height());
+				}
+				else {
+					$('#left').css('min-height',$('#right').height());
+				}
+				
+				$(function($, undefined) {
+				    $('#term').terminal(function(command, term) {
+				        if (command !== '') {
+				            var result = window.eval("(" + command + ")");
+				            if (result !== undefined) {
+				                term.echo(String(result));
+				            }
+				        } else {
+				           term.echo('');
+				        }
+				    }, {
+				        greetings: 'rafalopes command line Interpreter',
+				        name: 'js_demo',
+						height: parseInt((screenHeight - 20)/2) + parseInt((screenHeight - 20)/4),
+				        prompt: '#'});
+				});
+
+				
+			}
+
+
+		</script>
+		
+	</body>
+</html>
